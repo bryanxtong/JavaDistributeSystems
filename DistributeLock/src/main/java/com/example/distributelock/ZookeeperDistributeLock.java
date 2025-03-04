@@ -2,7 +2,7 @@ package com.example.distributelock;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
-
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -10,13 +10,16 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class ZookeeperDistributeLock {
+    private static final String ZOOKEEPER_CONNECTION_STRING = "localhost:2181";
+    private static final int SESSION_TIMEOUT = 3000;
 
     private ZooKeeper zookeeper;
     private String lockRoot;
     private String currentZkNode;
 
-    public ZookeeperDistributeLock(ZooKeeper zookeeper, String lockPath) {
-        this.zookeeper = zookeeper;
+    public ZookeeperDistributeLock(String lockPath) throws IOException {
+        this.zookeeper = new ZooKeeper(ZOOKEEPER_CONNECTION_STRING, SESSION_TIMEOUT, watchedEvent -> {
+        });
         this.lockRoot = lockPath;
     }
 
@@ -68,8 +71,7 @@ public class ZookeeperDistributeLock {
             executorService.submit(() -> {
                 try {
                     //multiple processes to connect to zk
-                    ZooKeeper zookeeper = new ZooKeeper("localhost:2181", 5000, null);
-                    ZookeeperDistributeLock lock = new ZookeeperDistributeLock(zookeeper, "/distributelocks");
+                    ZookeeperDistributeLock lock = new ZookeeperDistributeLock("/distributelocks");
                     lock.lock();
                     System.out.println("Lock acquired, executing critical section... " + Thread.currentThread().getName());
                     lock.unlock();
