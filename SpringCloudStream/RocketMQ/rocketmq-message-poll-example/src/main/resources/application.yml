@@ -1,0 +1,25 @@
+spring:
+  application:
+    name: rocketmq-poll-example
+  cloud:
+    stream:
+      bindings:
+        messageSupplier-out-0:
+          destination: continuous-topic
+          content-type: application/json
+        pollableInput-in-0:
+          content-type: application/json
+          destination: continuous-topic
+          group: consumer-group
+          consumer:
+            pollable: true
+      rocketmq:
+        binder:
+          name-server: localhost:9876
+          group: default-group
+      poller:
+        initial-delay: 0
+        fixed-delay: 5000
+      pollable-source: pollableInput
+server:
+  port: 8083
