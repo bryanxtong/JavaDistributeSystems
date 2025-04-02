@@ -1,0 +1,27 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        outputBatch-out-0:
+          destination: continuous-topic
+          content-type: application/json
+        inputBatch-in-0:
+          destination: continuous-topic
+          group: consumer-group
+          content-type: application/json
+          consumer:
+            batch-mode: true
+            concurrency: 3
+      rocketmq:
+        binder:
+          name-server: localhost:9876
+        bindings:
+          inputBatch-in-0:
+            consumer:
+              consumeMessageBatchMaxSize: 10
+              pullBatchSize: 5
+      poller:
+        initial-delay: 0
+        fixed-delay: 5000
+server:
+  port: 28089
