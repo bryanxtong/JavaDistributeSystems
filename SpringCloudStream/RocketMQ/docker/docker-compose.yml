@@ -1,0 +1,57 @@
+version: "3.9"
+
+services:
+  namesrv:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqnamesrv
+    ports:
+      - 9876:9876
+    networks:
+      - microservices
+    command: sh mqnamesrv
+  broker:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqbroker
+    ports:
+      - 10909:10909
+      - 10911:10911
+      - 10912:10912
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    depends_on:
+      - namesrv
+    networks:
+      - microservices
+    volumes:
+      - ./broker.conf:/home/rocketmq/rocketmq-5.3.1/conf/broker.conf
+    command: sh mqbroker -c /home/rocketmq/rocketmq-5.3.1/conf/broker.conf
+    #command: sh mqbroker
+  proxy:
+    image: apache/rocketmq:5.3.1
+    container_name: rmqproxy
+    networks:
+      - microservices
+    depends_on:
+      - broker
+      - namesrv
+    ports:
+      - 8080:8080
+      - 8081:8081
+    restart: on-failure
+    environment:
+      - NAMESRV_ADDR=rmqnamesrv:9876
+    command: sh mqproxy
+  rocketmq-web-console:
+    image: apacherocketmq/rocketmq-dashboard:latest
+    container_name: rmq-web-console
+    ports:
+      - 28080:8080
+    environment:
+      - JAVA_OPTS=-Drocketmq.namesrv.addr=rmqnamesrv:9876
+    depends_on:
+      - namesrv
+    networks:
+      - microservices
+networks:
+  microservices:
+    driver: bridge
