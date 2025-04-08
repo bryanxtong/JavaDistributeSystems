@@ -1,0 +1,15 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        producer-out-0:
+          destination: pollable-topic
+        consumer-in-0:
+          destination: pollable-topic
+          group: poll-group
+      kafka:
+        binder:
+          brokers: localhost:9092
+      pollable-source: consumer
+server:
+  port: 8084
