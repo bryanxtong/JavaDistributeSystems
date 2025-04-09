@@ -3,17 +3,22 @@ spring:
     stream:
       bindings:
         supplier-out-0:
-          destination: batch-topic
-        consumer-in-0:
-          destination: batch-topic
-          group: poll-group
+          destination: batch-in
+        process-in-0:
+          destination: batch-in
+          group: process-group
           consumer:
             batch-mode: true
+        process-out-0:
+          destination: batch-out
+        consumer-in-0:
+          destination: batch-out
+          group: consumer-group
       kafka:
         binder:
           brokers: localhost:9092
         bindings:
-          consumer-in-0:
+          process-in-0:
             consumer:
               configuration:
                 # Forces consumer to wait 5 seconds before polling for messages
@@ -21,6 +26,6 @@ spring:
                 fetch.min.bytes: 1000000000
                 max.poll.records: 10000000
     function:
-      definition: supplier;consumer
+      definition: supplier;process;consumer
 server:
   port: 8084
