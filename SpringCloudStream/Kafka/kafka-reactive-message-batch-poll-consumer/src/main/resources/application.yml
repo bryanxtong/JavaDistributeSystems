@@ -1,0 +1,84 @@
+spring:
+  cloud:
+    stream:
+      bindings:
+        supplier-out-0:
+          destination: batch-in
+          content-type: application/json
+          producer:
+            partition-count: 3
+            use-native-encoding: true
+        process-in-0:
+          destination: batch-in
+          group: process-group
+          content-type: application/json
+          consumer:
+            batch-mode: true
+            concurrency: 3
+            max-attempts: 3
+            back-off-initial-interval: 1000
+        process-out-0:
+          destination: batch-out
+          content-type: application/json
+          producer:
+            use-native-encoding: true
+            header-mode: headers
+        consumer-in-0:
+          destination: batch-out
+          group: consumer-group
+          content-type: application/json
+          consumer:
+            concurrency: 3
+      kafka:
+        binder:
+          brokers: localhost:9092
+          auto-create-topics: true
+          auto-add-partitions: true
+          configuration:
+            security.protocol: PLAINTEXT
+            # Producer configs
+            key.serializer: org.apache.kafka.common.serialization.StringSerializer
+            value.serializer: org.springframework.kafka.support.serializer.JsonSerializer
+            # Consumer configs
+            key.deserializer: org.apache.kafka.common.serialization.StringDeserializer
+            value.deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        bindings:
+          supplier-out-0:
+            producer:
+              configuration:
+                acks: all
+                retries: 3
+                linger.ms: 5
+                batch.size: 16384
+          process-in-0:
+            consumer:
+              configuration:
+                # Forces consumer to wait 5 seconds before polling for messages
+                fetch.max.wait.ms: 5000
+                fetch.min.bytes: 1000000000
+                max.poll.records: 10000000
+                isolation.level: read_committed
+                auto.offset.reset: earliest
+                spring.json.trusted.packages: "com.example.kafka.reactive"
+                spring.json.use.type.headers: true
+                spring.json.value.default.type: com.example.kafka.reactive.SimpleMsg
+          process-out-0:
+            producer:
+              configuration:
+                # Force type headers
+                spring.json.add.type.headers: true
+                spring.json.value.default.type: com.example.kafka.reactive.SimpleMsg
+                spring.json.trusted.packages: "com.example.kafka.reactive"
+          consumer-in-0:
+            consumer:
+              configuration:
+                enable.auto.commit: false
+                fetch.max.wait.ms: 500
+                fetch.min.bytes: 1024
+                spring.json.trusted.packages: "com.example.kafka.reactive"
+                spring.json.use.type.headers: true
+                spring.json.value.default.type: com.example.kafka.reactive.SimpleMsg
+    function:
+      definition: supplier;process;consumer
+server:
+  port: 8084
