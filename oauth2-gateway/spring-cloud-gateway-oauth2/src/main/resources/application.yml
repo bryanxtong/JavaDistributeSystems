@@ -5,55 +5,47 @@ spring:
     name: gateway-oauth2
   cloud:
     gateway:
+      default-filters:
+        - TokenRelay
+        - name: RequestRateLimiter
+          args:
+            redis-rate-limiter.replenishRate: 10
+            redis-rate-limiter.burstCapacity: 20
+            redis-rate-limiter.requestTokens: 1
+            key-resolver: "#{@userKeyResolver}"
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET
+            series: SERVER_ERROR
+            exceptions: java.io.IOException,java.util.concurrent.TimeoutException
+            backoff:
+              firstBackOff: 50ms
+              maxBackOff: 500ms
+              factor: 2
+              basedOnPreviousValue: false
       routes:
         - id: user-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/user/**
           filters:
-            - TokenRelay=
-            - name: RequestRateLimiter
+            - name: CircuitBreaker
               args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestTokens: 1
-                key-resolver: "#{@userKeyResolver}"
+                name: userCircuitBreaker
+                fallbackUri: forward:/user-fallback
         - id: product-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/products/**
-          filters:
-            - TokenRelay=
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestTokens: 1
-                key-resolver: "#{@userKeyResolver}"
         - id: admin-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/admin/**
-          filters:
-            - TokenRelay=
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestTokens: 1
-                key-resolver: "#{@userKeyResolver}"
         - id: manager-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/manager/**
-          filters:
-            - TokenRelay=
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-                redis-rate-limiter.requestTokens: 1
-                key-resolver: "#{@userKeyResolver}"
   security:
     oauth2:
       client:
@@ -80,3 +72,16 @@ spring:
       port: 6379
       password:
       timeout: 10000
+
+resilience4j:
+  circuitbreaker:
+    configs:
+      default:
+        sliding-window-size: 20
+        permitted-number-of-calls-in-half-open-state: 5
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 15000
+  timelimiter:
+    configs:
+      default:
+        timeout-duration: 5s

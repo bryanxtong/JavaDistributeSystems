@@ -4,13 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
-import reactor.core.publisher.Mono;
 
 /**
  * This spring cloud gateway forwards to keycloak and get the jwt and token-relay it
@@ -35,7 +33,7 @@ public class SecurityConfig {
     @Bean
     public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
         http.authorizeExchange(exchanges -> {
-                    exchanges.pathMatchers("/", "/login", "/webjars/**", "/static/**").permitAll()
+                    exchanges.pathMatchers("/", "/login", "/webjars/**", "/static/**","/user-fallback").permitAll()
                             .pathMatchers("/api/public/**").permitAll()
                             .anyExchange().authenticated();
                 })
