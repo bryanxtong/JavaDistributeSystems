@@ -1,6 +1,7 @@
-You can create there users with different roles to test
+You can create three users with different roles to test
 
-user    role
+```user    role
+
 bryan   USER 
 jimmy   ADMIN 
 kate    ADMIN,MANAGER
