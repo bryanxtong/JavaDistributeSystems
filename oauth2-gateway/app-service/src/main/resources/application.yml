@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: app-service
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/realms/myrealm
+          jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
+server:
+  port: 8083
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive: TRACE
+

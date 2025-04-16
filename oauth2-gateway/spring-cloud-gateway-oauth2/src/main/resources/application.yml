@@ -1,0 +1,52 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: gateway-oauth2
+  cloud:
+    gateway:
+      routes:
+        - id: user-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/user/**
+          filters:
+            - TokenRelay=
+        - id: product-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/products/**
+          filters:
+            - TokenRelay=
+        - id: admin-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/admin/**
+          filters:
+            - TokenRelay=
+        - id: manager-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/manager/**
+          filters:
+            - TokenRelay=
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: gateway-oauth2
+            client-secret: ZM75a7PxJ7OGziuXwcmLTklSz44nawrG
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            client-name: Keycloak
+
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/myrealm
+            authorization-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
