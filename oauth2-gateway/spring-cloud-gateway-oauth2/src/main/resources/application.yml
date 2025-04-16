@@ -12,24 +12,48 @@ spring:
             - Path=/api/user/**
           filters:
             - TokenRelay=
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestTokens: 1
+                key-resolver: "#{@userKeyResolver}"
         - id: product-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/products/**
           filters:
             - TokenRelay=
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestTokens: 1
+                key-resolver: "#{@userKeyResolver}"
         - id: admin-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/admin/**
           filters:
             - TokenRelay=
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestTokens: 1
+                key-resolver: "#{@userKeyResolver}"
         - id: manager-service
           uri: http://localhost:8083
           predicates:
             - Path=/api/manager/**
           filters:
             - TokenRelay=
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestTokens: 1
+                key-resolver: "#{@userKeyResolver}"
   security:
     oauth2:
       client:
@@ -50,3 +74,9 @@ spring:
             user-info-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/userinfo
             jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
             user-name-attribute: preferred_username
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      timeout: 10000
