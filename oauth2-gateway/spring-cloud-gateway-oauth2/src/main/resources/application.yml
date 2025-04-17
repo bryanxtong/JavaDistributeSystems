@@ -77,6 +77,7 @@ resilience4j:
   circuitbreaker:
     configs:
       default:
+        register-health-indicator: true
         sliding-window-size: 20
         permitted-number-of-calls-in-half-open-state: 5
         failure-rate-threshold: 50
@@ -85,3 +86,27 @@ resilience4j:
     configs:
       default:
         timeout-duration: 5s
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive: TRACE
+management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers,prometheus
+  health:
+    circuitbreakers:
+      enabled: true
+    indicators:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true
