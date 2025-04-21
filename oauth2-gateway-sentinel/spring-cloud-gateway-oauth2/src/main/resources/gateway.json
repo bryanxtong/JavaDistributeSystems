@@ -1,0 +1,13 @@
+[
+  {
+    "resource": "some_customized_api",
+    "count": 50
+  },
+  {
+    "resource": "user-service",
+    "count": 50,
+    "paramItem": {
+      "parseStrategy": 0
+    }
+  }
+]

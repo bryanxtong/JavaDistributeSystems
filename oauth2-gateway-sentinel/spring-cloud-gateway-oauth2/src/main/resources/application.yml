@@ -1,0 +1,117 @@
+server:
+  port: 8082
+spring:
+  application:
+    name: gateway-oauth2
+  cloud:
+    gateway:
+      default-filters:
+        - TokenRelay
+        - name: Retry
+          args:
+            retries: 3
+            methods: GET
+            series: SERVER_ERROR
+            exceptions: java.io.IOException,java.util.concurrent.TimeoutException
+            backoff:
+              firstBackOff: 50ms
+              maxBackOff: 500ms
+              factor: 2
+              basedOnPreviousValue: false
+      routes:
+        - id: user-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/user/**
+        - id: product-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/products/**
+        - id: admin-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/admin/**
+        - id: manager-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/manager/**
+    sentinel:
+      #gateway flow control
+      datasource.ds2.file:
+        file: "classpath: gateway.json"
+        rule-type: gw_flow
+      #gateway flow control
+      datasource.ds1.file:
+        file: "classpath: api.json"
+        rule-type: gw_api_group
+      #gateway degrade control
+      datasource.ds3.file:
+        file: "classpath: degrade-rules.json"
+        rule-type: degrade
+      eager: true
+      filter:
+        enabled: true
+      transport:
+        dashboard: localhost:8858
+        port: 8719
+        clientIp: 192.168.71.116
+      scg:
+        fallback:
+          mode: response
+          response-body: { "code": 429, "msg","requests rate limited or degraded" }
+        order: -100
+
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: gateway-oauth2
+            client-secret: etD1cGgyaUBzXyr6kX952XIt4BexGj4L
+            scope: openid,profile,email
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/keycloak"
+            client-name: Keycloak
+
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/realms/myrealm
+            authorization-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/auth
+            token-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/token
+            user-info-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/userinfo
+            jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
+            user-name-attribute: preferred_username
+      #resourceserver:
+        #jwt:
+          #issuer-uri: http://localhost:8080/realms/myrealm
+          #jwk-set-uri: http://localhost:8080/realms/myrealm/protocol/openid-connect/certs
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      password:
+      timeout: 10000
+logging:
+  level:
+    org.springframework.security: DEBUG
+    org.springframework.web.reactive: TRACE
+management:
+  endpoint:
+    health:
+      show-details: always
+      show-components: always
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,circuitbreakers,prometheus
+  health:
+    circuitbreakers:
+      enabled: true
+    indicators:
+      enabled: true
+  prometheus:
+    metrics:
+      export:
+        enabled: true

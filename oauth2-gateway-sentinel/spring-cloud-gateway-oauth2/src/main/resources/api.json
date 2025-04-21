@@ -1,0 +1,19 @@
+[
+  {
+    "apiName": "some_customized_api",
+    "predicateItems": [
+      {
+        "pattern": "/api/products/**",
+        "matchStrategy": 1
+      },
+      {
+        "pattern": "/api/admin/**",
+        "matchStrategy": 1
+      },
+      {
+        "pattern": "/api/manager/**",
+        "matchStrategy": 1
+      }
+    ]
+  }
+]

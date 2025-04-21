@@ -1,0 +1,30 @@
+[
+  {
+    "resource": "user-service",
+    "grade": 0,
+    "count": 500,
+    "timeWindow": 10,
+    "slowRatioThreshold": 0.5
+  },
+  {
+    "resource": "product-service",
+    "grade": 0,
+    "count": 500,
+    "timeWindow": 10,
+    "slowRatioThreshold": 0.5
+  },
+  {
+    "resource": "admin-service",
+    "grade": 1,
+    "count": 0.3,
+    "timeWindow": 20
+  },
+  {
+    "resource": "manager-service",
+    "grade": 2,
+    "count": 5,
+    "timeWindow": 30,
+    "minRequestAmount": 3,
+    "statIntervalMs": 5000
+  }
+]
