@@ -59,7 +59,7 @@ spring:
       scg:
         fallback:
           mode: response
-          response-body: { "code": 429, "msg","requests rate limited or degraded" }
+          response-body: { "code": 429, "msg": "requests rate limited or degraded"}
         order: -100
 
   security:
