@@ -9,12 +9,12 @@ services:
     ports:
       - "8080:8080"
     command: ["start-dev"]
-  #sentinel-dashboard:
-    #image: bladex/sentinel-dashboard:latest
-    #container_name: sentinel-dashboard
-    #ports:
-      #- "8858:8858"
-    #restart: always
+  sentinel-dashboard:
+    image: bladex/sentinel-dashboard:latest
+    container_name: sentinel-dashboard
+    ports:
+      - "8858:8858"
+    restart: always
   redis:
     image: redis:7.0-alpine
     container_name: redis
