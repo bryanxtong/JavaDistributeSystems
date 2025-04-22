@@ -54,7 +54,7 @@ spring:
       transport:
         dashboard: localhost:8858
         port: 8719
-        #your docker ip, needs to change for your local env
+        #your docker host ip, needs to change for your local env
         clientIp: 192.168.71.116
       scg:
         fallback:
