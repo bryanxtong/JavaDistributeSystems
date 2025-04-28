@@ -7,13 +7,16 @@ import org.springframework.grpc.sample.proto.HelloReply;
 import org.springframework.grpc.sample.proto.HelloRequest;
 import org.springframework.grpc.sample.proto.SimpleGrpc;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Service
 public class GrpcServerService extends SimpleGrpc.SimpleImplBase {
     private Log log = LogFactory.getLog(GrpcServerService.class);
+    private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
         HelloReply reply = HelloReply.newBuilder().setMessage("Hello=>" + req.getName()).build();
@@ -22,33 +25,28 @@ public class GrpcServerService extends SimpleGrpc.SimpleImplBase {
     }
 
     public void streamHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {
-        int count = 0;
-        while (count < 10) {
-            HelloReply reply = HelloReply.newBuilder().setMessage("Hello(" + count + ")===>" + req.getName()).build();
-            responseObserver.onNext(reply);
-            count++;
-            try {
-                Thread.sleep(1000L);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                responseObserver.onError(e);
-                return;
-            }
-        }
-        responseObserver.onCompleted();
+        Flux.interval(Duration.ofSeconds(1))
+                .take(10)
+                .map(count -> HelloReply.newBuilder().setMessage("Hello(" + count + ")===>" + req.getName()).build())
+                .subscribe(responseObserver::onNext,
+                        responseObserver::onError,
+                        responseObserver::onCompleted);
     }
 
     public StreamObserver<HelloRequest> clientStreamHello(StreamObserver<HelloReply> responseObserver) {
         return new StreamObserver<>() {
             StringBuilder names = new StringBuilder();
+
             @Override
             public void onNext(HelloRequest helloRequest) {
                 names.append(helloRequest.getName()).append(",");
             }
+
             @Override
             public void onError(Throwable throwable) {
                 responseObserver.onError(throwable);
             }
+
             @Override
             public void onCompleted() {
                 String message = names.substring(0, names.length() - 1);
@@ -60,20 +58,16 @@ public class GrpcServerService extends SimpleGrpc.SimpleImplBase {
 
     public StreamObserver<HelloRequest> biStreamHello(StreamObserver<HelloReply> responseObserver) {
         return new StreamObserver<>() {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             @Override
             public void onNext(HelloRequest helloRequest) {
-                responseObserver.onNext(HelloReply.newBuilder().setMessage(" Hello " + helloRequest.getName() + " at " + simpleDateFormat.format(new Date())).build());
-                try {
-                    Thread.sleep(200);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
+                responseObserver.onNext(HelloReply.newBuilder().setMessage(" Hello " + helloRequest.getName() + " at " + LocalDateTime.now().format(formatter)).build());
             }
+
             @Override
             public void onError(Throwable throwable) {
                 responseObserver.onError(throwable);
             }
+
             @Override
             public void onCompleted() {
                 responseObserver.onCompleted();
