@@ -1,0 +1,21 @@
+server:
+  port: 8088
+spring:
+  application:
+    name: DubboProvider
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+    sentinel:
+      transport:
+        port: 9000
+        dashboard: localhost:1000
+dubbo:
+  protocol:
+    name: tri
+    port: 50051
+  registry:
+    address: nacos://localhost:8848
+  scan:
+    base-packages: com.example.dubbo
