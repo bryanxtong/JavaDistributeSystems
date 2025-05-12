@@ -18,7 +18,7 @@
         <dependency>
             <groupId>io.grpc</groupId>
             <artifactId>grpc-services</artifactId>
-            <version>1.72.0</version>
+            <version>1.70.0</version>
         </dependency>
         <dependency>
             <groupId>io.grpc</groupId>
