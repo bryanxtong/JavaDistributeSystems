@@ -1,0 +1,11 @@
+
+spring:
+  application:
+    name: grpc-server-demo
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+server:
+  port: 8084

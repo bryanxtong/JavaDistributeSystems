@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: grpc-client-demo
+  grpc:
+    client:
+      channels:
+        local:
+          address: 0.0.0.0:9090
+server:
+  port: 8082

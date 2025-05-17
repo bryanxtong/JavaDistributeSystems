@@ -30,7 +30,7 @@
         <java.version>17</java.version>
         <grpc.version>1.70.0</grpc.version>
         <protobuf-java.version>3.25.6</protobuf-java.version>
-        <spring-grpc.version>0.8.0-SNAPSHOT</spring-grpc.version>
+        <spring-grpc.version>0.9.0-SNAPSHOT</spring-grpc.version>
     </properties>
     <dependencies>
         <dependency>
@@ -44,6 +44,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
