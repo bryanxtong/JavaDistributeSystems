@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  */
 public class BlockingTokenSupplier implements Supplier<String> {
     private AtomicReference<String> token = new AtomicReference<>();
-    private AtomicReference<Instant> expiryTime = new AtomicReference<>();
+    private AtomicReference<Instant> expiresAt = new AtomicReference<>();
 
     private ClientRegistration reg;
     private WebClientReactiveClientCredentialsTokenResponseClient creds;
@@ -37,7 +37,7 @@ public class BlockingTokenSupplier implements Supplier<String> {
     public String get() {
         System.out.println("Supplier Thread: " + Thread.currentThread().getName());
         Instant now = Instant.now();
-        if (token.get() != null && expiryTime.get() != null && expiryTime.get().isAfter(now)) {
+        if (token.get() != null && expiresAt.get() != null && expiresAt.get().isAfter(now)) {
             return token.get();
         }
         OAuth2AccessToken oAuth2AccessToken = null;
@@ -52,7 +52,7 @@ public class BlockingTokenSupplier implements Supplier<String> {
             throw new RuntimeException(e);
         }
         token.set(oAuth2AccessToken.getTokenValue());
-        expiryTime.set(oAuth2AccessToken.getExpiresAt());
+        expiresAt.set(oAuth2AccessToken.getExpiresAt());
 
         return token.get();
     }

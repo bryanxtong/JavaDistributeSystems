@@ -14,8 +14,8 @@ import java.util.List;
 
 @Configuration
 public class GrpcClientStubs {
-    private final String target = "0.0.0.0:9090";
-    private final String GRPC_CLIENT_NAME = "grpc-client";
+    private final static String target = "0.0.0.0:9090";
+    private final static String GRPC_CLIENT_NAME = "grpc-client";
     @Bean
     public WebClientReactiveClientCredentialsTokenResponseClient reactiveTokenResponseClient() {
         return new WebClientReactiveClientCredentialsTokenResponseClient();
@@ -51,5 +51,4 @@ public class GrpcClientStubs {
         ClientRegistration reg = clientRegistrationRepository.findByRegistrationId(GRPC_CLIENT_NAME);
         return SimpleGrpc.newFutureStub(grpcChannelFactory.createChannel(target, ChannelBuilderOptions.defaults().withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier)))));
     }
-
 }
