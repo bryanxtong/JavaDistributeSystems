@@ -19,6 +19,7 @@ public class ServletSecurityConfig {
                         .requestMatchers("/Simple/streamHello").hasAuthority("SCOPE_profile")
                         .requestMatchers("/Simple/clientStreamHello").hasAuthority("SCOPE_profile")
                         .requestMatchers("/Simple/biStreamHello").hasAuthority("SCOPE_profile")
+                        .requestMatchers("/grpc.*/*").permitAll()
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()));

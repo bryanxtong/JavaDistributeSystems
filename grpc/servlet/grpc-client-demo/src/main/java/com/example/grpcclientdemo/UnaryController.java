@@ -26,7 +26,7 @@ public class UnaryController {
     @Autowired
     SimpleGrpc.SimpleBlockingV2Stub simpleBlockingV2Stub;
 
-    @GetMapping("/unary/{name}")
+    @GetMapping("/sayHello/{name}")
     public String unary(@PathVariable String name) {
         String message = "";
         try {
