@@ -28,7 +28,13 @@ public class UnaryController {
 
     @GetMapping("/unary/{name}")
     public String unary(@PathVariable String name) {
-        return simpleBlockingStub.sayHello(HelloRequest.newBuilder().setName(name).build()).getMessage();
+        String message = "";
+        try {
+            message = simpleBlockingStub.sayHello(HelloRequest.newBuilder().setName(name).build()).getMessage();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return message;
     }
 
 /*    @GetMapping("/blocking/{name}")

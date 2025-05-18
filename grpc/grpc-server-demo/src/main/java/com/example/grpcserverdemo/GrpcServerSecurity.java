@@ -6,9 +6,9 @@ import org.springframework.grpc.server.GlobalServerInterceptor;
 import org.springframework.grpc.server.security.AuthenticationProcessInterceptor;
 import org.springframework.grpc.server.security.GrpcSecurity;
 import org.springframework.security.config.Customizer;
-import org.springframework.web.reactive.config.EnableWebFlux;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 @Configuration
-@EnableWebFlux
+@EnableWebFluxSecurity
 public class GrpcServerSecurity {
     @Bean
     @GlobalServerInterceptor
