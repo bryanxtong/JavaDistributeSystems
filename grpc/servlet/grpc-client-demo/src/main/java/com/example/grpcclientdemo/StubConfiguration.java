@@ -13,7 +13,6 @@ import org.springframework.security.oauth2.client.endpoint.RestClientClientCrede
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -32,26 +31,16 @@ public class StubConfiguration {
 
     @Bean
     GrpcClientFactoryCustomizer blockingStub(ObjectProvider<ClientRegistrationRepository> context) {
-        return registry -> registry.channel("blockingStub", ChannelBuilderOptions.defaults()
-                .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
-    }
-
-    @Bean
-    GrpcClientFactoryCustomizer blockingStubV2(ObjectProvider<ClientRegistrationRepository> context) {
-        return registry -> registry.channel("blockingStubV2", ChannelBuilderOptions.defaults()
-                .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
-    }
-
-    @Bean
-    GrpcClientFactoryCustomizer nonBlockingStub(ObjectProvider<ClientRegistrationRepository> context) {
-        return registry -> registry.channel("nonBlockingStub", ChannelBuilderOptions.defaults()
-                .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
-    }
-
-    @Bean
-    GrpcClientFactoryCustomizer futureStub(ObjectProvider<ClientRegistrationRepository> context) {
-        return registry -> registry.channel("futureStub", ChannelBuilderOptions.defaults()
-                .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
+        return registry -> {
+            registry.channel("blockingStub", ChannelBuilderOptions.defaults()
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
+            registry.channel("blockingStubV2", ChannelBuilderOptions.defaults()
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
+            registry.channel("nonBlockingStub", ChannelBuilderOptions.defaults()
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
+            registry.channel("futureStub", ChannelBuilderOptions.defaults()
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier(context)))));
+        };
     }
 
     /**
