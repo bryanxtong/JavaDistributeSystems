@@ -1,0 +1,35 @@
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
+      routes:
+        - id: json-grpc
+          uri: https://localhost:9090
+          predicates:
+            - Path=/json/**
+          filters:
+            - name: JsonToGrpc
+              args:
+                protoDescriptor: classpath:proto/hello.pb
+                protoFile: classpath:proto/hello.proto
+                service: Simple
+                method: SayHello
+  grpc:
+    client:
+      default-channel:
+        ssl:
+          bundle: sslclient
+          enabled: true
+        negotiation-type: tls
+  ssl:
+    bundle:
+      jks:
+        sslclient:
+          keystore:
+            location: classpath:keystore.p12
+            password: password
+            type: PKCS12
+          key:
+            password: password
