@@ -27,20 +27,19 @@ public class GrpcClientStubs {
     }
 
     @Bean
-    GrpcClientFactoryCustomizer grpcClientFactoryCustomizer(BlockingTokenSupplier tokenSupplier) {
+    GrpcClientFactoryCustomizer grpcClientFactoryCustomizer(ClientRegistrationRepository reg, WebClientReactiveClientCredentialsTokenResponseClient client) {
         return registry -> {
             registry.channel("blockingStub", ChannelBuilderOptions.defaults()
-                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier))));
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenBlockingGet(reg,client)))));
             registry.channel("blockingStubV2", ChannelBuilderOptions.defaults()
-                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier))));
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenBlockingGet(reg,client)))));
             registry.channel("nonBlockingStub", ChannelBuilderOptions.defaults()
-                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier))));
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenBlockingGet(reg,client)))));
             registry.channel("futureStub", ChannelBuilderOptions.defaults()
-                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenSupplier))));
+                    .withInterceptors(List.of(new BearerTokenAuthenticationInterceptor(tokenBlockingGet(reg,client)))));
         };
     }
 
-    @Bean
     public BlockingTokenSupplier tokenBlockingGet(ClientRegistrationRepository clientRegistrationRepository, WebClientReactiveClientCredentialsTokenResponseClient client) {
         ClientRegistration reg = clientRegistrationRepository.findByRegistrationId(GRPC_CLIENT_NAME);
         return new BlockingTokenSupplier(reg,client);

@@ -18,8 +18,6 @@ import java.util.function.Supplier;
  * we use this as DefaultRestClient has block exceptions during webflux app
  */
 public class BlockingTokenSupplier implements Supplier<String> {
-    private AtomicReference<String> token = new AtomicReference<>();
-    private AtomicReference<Instant> expiresAt = new AtomicReference<>();
 
     private ClientRegistration reg;
     private WebClientReactiveClientCredentialsTokenResponseClient creds;
@@ -30,16 +28,12 @@ public class BlockingTokenSupplier implements Supplier<String> {
     }
 
     /**
-     * Each time, this method to be called by BearerTokenAuthenticationInterceptor
+     * Each time, this method to be called by BearerTokenAuthenticationInterceptor to get token. TODO
      * @return
      */
     @Override
     public String get() {
         System.out.println("Supplier Thread: " + Thread.currentThread().getName());
-        Instant now = Instant.now();
-        if (token.get() != null && expiresAt.get() != null && expiresAt.get().isAfter(now)) {
-            return token.get();
-        }
         OAuth2AccessToken oAuth2AccessToken = null;
         try {
             oAuth2AccessToken = creds.getTokenResponse(new OAuth2ClientCredentialsGrantRequest(reg)).subscribeOn(Schedulers.boundedElastic()) //add subscribeOn(Schedulers.boundedElastic() to eliminate blocking
@@ -51,9 +45,6 @@ public class BlockingTokenSupplier implements Supplier<String> {
         } catch (ExecutionException e) {
             throw new RuntimeException(e);
         }
-        token.set(oAuth2AccessToken.getTokenValue());
-        expiresAt.set(oAuth2AccessToken.getExpiresAt());
-
-        return token.get();
+        return oAuth2AccessToken.getTokenValue();
     }
 }
