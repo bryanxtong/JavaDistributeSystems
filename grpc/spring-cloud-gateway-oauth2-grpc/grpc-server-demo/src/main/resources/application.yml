@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: grpc-server-demo
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+  grpc:
+    server:
+      ssl:
+        bundle: ssltest
+        secure: false
+        enabled: true
+  ssl:
+    bundle:
+      jks:
+        ssltest:
+          keystore:
+            location: classpath:keystore.p12
+            password: password
+            type: PKCS12
+          key:
+            password: password
+server:
+  port: 8084

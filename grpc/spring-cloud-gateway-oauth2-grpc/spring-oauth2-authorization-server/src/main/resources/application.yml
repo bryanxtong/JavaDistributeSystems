@@ -1,0 +1,36 @@
+server:
+  port: 9000
+  error:
+    include-exception: true
+    include-message: always
+logging:
+  level:
+    org.springframework.security: debug
+    org.springframework.security.oauth2: trace
+    org.springframework.web: DEBUG
+    org.springframework.boot.web.servlet.error: DEBUG
+spring:
+  security:
+    oauth2:
+      authorizationserver:
+        client:
+          grpc-client:
+            registration:
+              client-id: "grpc-client"
+              client-secret: "{noop}secret"
+              client-authentication-methods:
+                - "client_secret_basic"
+              authorization-grant-types:
+                - "client_credentials"
+                - "authorization_code"
+                - "refresh_token"
+              redirect-uris:
+                - "http://localhost:8080/login/oauth2/code/grpc-client"
+              post-logout-redirect-uris:
+                - "http://localhost:8080/"
+              scopes:
+                - "openid"
+                - "profile"
+            #require-authorization-consent: true
+        issuer: http://localhost:9000
+
