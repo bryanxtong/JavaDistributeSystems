@@ -16,6 +16,10 @@ import java.util.List;
 @Configuration
 public class GrpcOauth2ClientConfig {
 
+    /**
+     * For local client login
+     * @return
+     */
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user = User.withUsername("user")
