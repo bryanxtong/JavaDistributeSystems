@@ -16,7 +16,8 @@ public class SecurityConfig {
                                 .pathMatchers("/api/public/**").permitAll()
                                 .anyExchange().authenticated()
                 )
-                .formLogin(withDefaults());
+                .formLogin(withDefaults())
+                .httpBasic(withDefaults());
 
         return httpSecurity.build();
     }

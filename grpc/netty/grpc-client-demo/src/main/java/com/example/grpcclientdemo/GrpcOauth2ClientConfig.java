@@ -15,6 +15,10 @@ import java.util.List;
 @Configuration
 public class GrpcOauth2ClientConfig {
 
+    /**
+     * for local client only
+     * @return
+     */
     @Bean
     public MapReactiveUserDetailsService userDetailsService() {
         UserDetails user = User.withUsername("user")

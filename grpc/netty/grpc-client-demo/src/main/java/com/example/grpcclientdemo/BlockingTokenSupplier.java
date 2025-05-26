@@ -28,7 +28,8 @@ public class BlockingTokenSupplier implements Supplier<String> {
     }
 
     /**
-     * Each time, this method to be called by BearerTokenAuthenticationInterceptor to get token. TODO
+     * Each time, this method to be called by BearerTokenAuthenticationInterceptor to get token.
+     * How to cache a token for a user TODO
      * @return
      */
     @Override
