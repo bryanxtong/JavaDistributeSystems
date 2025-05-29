@@ -1,0 +1,1 @@
+This folder contains an example on how to validate oauth token in gprc server for grpc-spring library https://github.com/grpc-ecosystem/grpc-spring
