@@ -19,3 +19,11 @@ grpc:
   consul:
     discovery:
       tags: myGrpc
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
