@@ -7,7 +7,15 @@ spring:
         jwt:
           jwk-set-uri: http://localhost:9000/oauth2/jwks
           issuer-uri: http://localhost:9000
+  cloud:
+    consul:
+      discovery:
+        tags: myWebTag
 server:
   port: 8010
 grpc:
   port: 9090
+  enable-reflection: true
+  consul:
+    discovery:
+      tags: myGrpc
