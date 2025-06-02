@@ -9,7 +9,7 @@ How to use
 consul agent -dev
 ```
 
-2. start the authorization server which is working on port 9090
+2. start the authorization server which is working on port 9000
 
 3. start gprc server multiple instances
 
