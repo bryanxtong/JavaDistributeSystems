@@ -1,5 +1,4 @@
-1. get the nacos docker-compose standalone and run it
-https://github.com/nacos-group/nacos-docker/tree/master/example
+1. get the nacos docker-compose standalone from https://github.com/nacos-group/nacos-docker and run it
 ```
 docker compose -f example/standalone-mysql.yaml up
 
