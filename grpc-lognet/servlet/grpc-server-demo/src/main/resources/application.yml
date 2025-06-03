@@ -14,7 +14,7 @@ spring:
 server:
   port: 8010
 grpc:
-  port: 9090
+  port: 0
   enable-reflection: true
   consul:
     discovery:

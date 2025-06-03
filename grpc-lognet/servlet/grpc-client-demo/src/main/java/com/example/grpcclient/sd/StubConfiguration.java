@@ -13,6 +13,7 @@ import org.springframework.grpc.sample.proto.SimpleGrpc;
 @Configuration
 public class StubConfiguration {
     public static final String SCHEME = "grpc";
+    //service name -> add an extra gprc before the application name
     public static final String serviceName = "grpc-grpc-server-demo";
 
     @Bean

@@ -16,9 +16,8 @@ spring:
         provider:
           grpc-client:
             issuer-uri: http://localhost:9000
-      #enable for postman testing
-      #resourceserver:
-        #jwt:
-          #jwk-set-uri: http://localhost:9000/oauth2/jwks
-          #issuer-uri: http://localhost:9000
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: http://localhost:9000
 
