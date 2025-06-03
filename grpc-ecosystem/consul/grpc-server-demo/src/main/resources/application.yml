@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: grpc-server-demo
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: http://localhost:9000
+server:
+  port: 8010
+grpc:
+  server:
+    port: 0
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
