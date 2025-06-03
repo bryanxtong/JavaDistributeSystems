@@ -28,7 +28,7 @@ import java.util.function.Consumer;
 @RestController
 @RequestMapping("api")
 public class FutureStubController extends BaseController {
-    @GrpcClient("local-grpc-server")
+    @GrpcClient("gprc-server-demo")
     SimpleGrpc.SimpleFutureStub simpleFutureStub;
 
     @GetMapping("/async/{name}")

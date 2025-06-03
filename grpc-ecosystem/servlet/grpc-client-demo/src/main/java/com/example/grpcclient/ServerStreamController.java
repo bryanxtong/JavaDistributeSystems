@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequestMapping("api")
 public class ServerStreamController extends BaseController{
-    @GrpcClient("local-grpc-server")
+    @GrpcClient("gprc-server-demo")
     SimpleGrpc.SimpleStub simpleStub;
 
     /**

@@ -2,7 +2,6 @@ package com.example.grpcclient;
 
 import net.devh.boot.grpc.client.inject.GrpcClient;
 import net.devh.boot.grpc.client.security.CallCredentialsHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.grpc.sample.proto.HelloRequest;
 import org.springframework.grpc.sample.proto.SimpleGrpc;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
@@ -11,15 +10,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("api")
 public class UnaryController extends BaseController{
-    @GrpcClient("local-grpc-server")
+    @GrpcClient("gprc-server-demo")
     SimpleGrpc.SimpleBlockingStub simpleBlockingStub;
 
     @GetMapping("/unary/{name}")

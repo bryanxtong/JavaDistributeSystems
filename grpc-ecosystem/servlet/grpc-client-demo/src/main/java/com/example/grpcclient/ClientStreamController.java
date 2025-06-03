@@ -18,7 +18,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api")
 public class ClientStreamController extends BaseController {
-    @GrpcClient("local-grpc-server")
+    @GrpcClient("gprc-server-demo")
     SimpleGrpc.SimpleStub simpleStub;
 
     /**

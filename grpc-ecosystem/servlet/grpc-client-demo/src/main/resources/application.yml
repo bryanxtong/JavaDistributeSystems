@@ -16,15 +16,24 @@ spring:
         provider:
           grpc-client:
             issuer-uri: http://localhost:9000
-      ##if necessary
-      #resourceserver:
-        #jwt:
-          #jwk-set-uri: http://localhost:9000/oauth2/jwks
-          #issuer-uri: http://localhost:9000
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: http://localhost:9000
 grpc:
   client:
-    local-grpc-server:
-      address: "static://127.0.0.1:9090"
+    gprc-server-demo:
+      address: 'discovery:///GRPC-SERVER-DEMO'
       enable-keep-alive: true
       keep-alive-without-calls: true
       negotiation-type: plaintext
+eureka:
+  instance:
+    prefer-ip-address: true
+    status-page-url-path: /actuator/info
+    health-check-url-path: /actuator/health
+  client:
+    register-with-eureka: false
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
