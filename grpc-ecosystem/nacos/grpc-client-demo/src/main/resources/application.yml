@@ -1,0 +1,32 @@
+
+spring:
+  application:
+    name: grpc-client-demo
+  security:
+    oauth2:
+      client:
+        registration:
+          grpc-client:
+            client-id: grpc-client
+            client-secret: secret
+            scope: openid,profile
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            client-name: Grpc Client
+
+        provider:
+          grpc-client:
+            issuer-uri: http://localhost:9000
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: http://localhost:9000
+grpc:
+  client:
+    gprc-server-demo:
+      address: 'discovery:///grpc-server-demo'
+      enable-keep-alive: true
+      keep-alive-without-calls: true
+      negotiation-type: plaintext
+server:
+  port: 8082
