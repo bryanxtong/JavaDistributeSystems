@@ -10,4 +10,4 @@ consul agent -dev
 
 3. start gprc server multiple instances
 
-4. start the grpc client with user (user1/password), It will load balance the requests between the servers using round robin.
+4. start the grpc client http://localhost:8080/api/unary/bryan with user (user1/password), It will load balance the requests between the servers using round robin.
