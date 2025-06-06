@@ -1,0 +1,35 @@
+spring:
+  application:
+    name: grpc-server-demo
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          jwk-set-uri: http://localhost:9000/oauth2/jwks
+          issuer-uri: http://localhost:9000
+  cloud:
+    zookeeper:
+      connect-string: localhost:2181
+      discovery:
+        metadata:
+          webtag: MyWebTag
+server:
+  port: 8020
+
+
+grpc:
+  port: 0
+  enable-reflection: true
+  zookeeper:
+    discovery:
+      metadata: # medata from spring.cloud.zookeeper.discovery.metadata and grpc.zookeeper.discovery.metadata will override if they share the same name
+        tag: myGrpcTag
+
+management:
+  endpoint:
+    health:
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
