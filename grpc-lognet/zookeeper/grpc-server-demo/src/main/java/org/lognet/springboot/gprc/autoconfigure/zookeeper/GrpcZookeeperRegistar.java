@@ -24,14 +24,11 @@ public class GrpcZookeeperRegistar implements SmartLifecycle {
     @EventListener
     public void onGrpcServerStarted(GRpcServerInitializedEvent event) {
         ApplicationContext applicationContext = event.getApplicationContext();
-        ZookeeperDiscoveryProperties zookeeperDiscoveryProperties = applicationContext.getBean(ZookeeperDiscoveryProperties.class);
         GrpcZookeeperProperties grpcZookeeperProperties = applicationContext.getBean(GrpcZookeeperProperties.class);
         GRpcServerProperties gRpcServerProperties = applicationContext.getBean(GRpcServerProperties.class);
         ZookeeperRegistration registration = applicationContext.getBean(ZookeeperRegistration.class);
-
         //metadata from spring.cloud.zookeeper.discovery and gprc.zookeeper.discovery will override as they are using the same instance
         registration.getMetadata().putAll(grpcZookeeperProperties.getDiscovery().getMetadata());
-        registration.getMetadata().putAll(zookeeperDiscoveryProperties.getMetadata());
         Integer port = gRpcServerProperties.getPort();
         if (port == null || port == 0) {
             registration.getMetadata().put(GPPC_PORT, String.valueOf(gRpcServerProperties.getRunningPort()));
