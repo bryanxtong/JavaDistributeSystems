@@ -14,7 +14,7 @@ spring:
         metadata:
           webtag: MyWebTag
 server:
-  port: 8020
+  port: 8010
 grpc:
   port: 0
   enable-reflection: true
