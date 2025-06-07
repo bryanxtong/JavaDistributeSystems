@@ -15,16 +15,9 @@ spring:
           webtag: MyWebTag
 server:
   port: 8020
-
-
 grpc:
   port: 0
   enable-reflection: true
-  zookeeper:
-    discovery:
-      metadata: # medata from spring.cloud.zookeeper.discovery.metadata and grpc.zookeeper.discovery.metadata will override if they share the same name
-        tag: myGrpcTag
-
 management:
   endpoint:
     health:
