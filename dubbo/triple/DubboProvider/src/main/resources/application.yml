@@ -8,6 +8,9 @@ dubbo:
     name: tri
     port: 50051
   registry:
-    address: nacos://localhost:8848
+    address: 'nacos://localhost:8848'
+    username: nacos
+    password: nacos
+    #register-mode: instance
   scan:
     base-packages: com.example.dubbo
