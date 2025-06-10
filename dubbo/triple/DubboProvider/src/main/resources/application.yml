@@ -2,15 +2,7 @@ server:
   port: 8088
 spring:
   application:
-    name: DubboProvider
-  cloud:
-    nacos:
-      discovery:
-        server-addr: localhost:8848
-    sentinel:
-      transport:
-        port: 9000
-        dashboard: localhost:1000
+    name: dubbo-provider
 dubbo:
   protocol:
     name: tri

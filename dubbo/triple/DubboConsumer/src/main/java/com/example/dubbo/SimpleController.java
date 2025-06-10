@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class SimpleController {
 
-    @DubboReference
+    @DubboReference(loadbalance = "roundrobin")
     private SimpleService simpleService;
 
     /**
