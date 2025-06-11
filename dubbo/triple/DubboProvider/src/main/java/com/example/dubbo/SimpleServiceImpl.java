@@ -2,12 +2,13 @@ package com.example.dubbo;
 
 import org.apache.dubbo.common.stream.StreamObserver;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.grpc.sample.proto.DubboSimpleTriple;
 import org.springframework.grpc.sample.proto.HelloRequest;
 import org.springframework.grpc.sample.proto.HelloReply;
 import java.util.concurrent.TimeUnit;
 
 @DubboService
-public class SimpleServiceImpl implements SimpleService {
+public class SimpleServiceImpl extends DubboSimpleTriple.SimpleImplBase {
 
     /**
      * Unary RPC: sayHello

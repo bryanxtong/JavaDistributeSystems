@@ -4,6 +4,7 @@ import org.apache.dubbo.common.stream.StreamObserver;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.grpc.sample.proto.HelloReply;
 import org.springframework.grpc.sample.proto.HelloRequest;
+import org.springframework.grpc.sample.proto.Simple;
 import org.springframework.stereotype.Service;
 
 import java.util.function.BiConsumer;
@@ -13,7 +14,7 @@ import java.util.function.Consumer;
 public class SimpleServiceClient {
 
     @DubboReference(loadbalance = "roundrobin")
-    private SimpleService simpleService;
+    private Simple simpleService;
 
     public void sayHello(String name, Consumer<String> responseConsumer, Consumer<Throwable> errorConsumer) {
         try {

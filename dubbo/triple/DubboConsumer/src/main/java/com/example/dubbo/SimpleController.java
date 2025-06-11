@@ -4,6 +4,7 @@ import org.apache.dubbo.common.stream.StreamObserver;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.grpc.sample.proto.HelloReply;
 import org.springframework.grpc.sample.proto.HelloRequest;
+import org.springframework.grpc.sample.proto.Simple;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -16,7 +17,7 @@ import java.util.List;
 public class SimpleController {
 
     @DubboReference(loadbalance = "roundrobin")
-    private SimpleService simpleService;
+    private Simple simpleService;
 
     /**
      * Unary RPC: sayHello
