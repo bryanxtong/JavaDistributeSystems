@@ -1,4 +1,4 @@
-This includes a dubbo 3 triple example that has grpc support and also integrates the sentinel for flow control and degrade control
+This includes a dubbo 3 triple example that integrates the sentinel for flow control and degrade control
 
 1. get the nacos docker-compose standalone from https://github.com/nacos-group/nacos-docker and run it
 ```
