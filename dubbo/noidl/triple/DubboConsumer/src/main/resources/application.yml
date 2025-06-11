@@ -1,0 +1,13 @@
+server:
+  port: 8090
+spring:
+  application:
+    name: dubbo-consumer
+dubbo:
+  #protocol:
+    #name: tri
+    #port: 50051
+  registry:
+    address: nacos://localhost:8848
+  scan:
+    base-packages: com.example.dubbo
