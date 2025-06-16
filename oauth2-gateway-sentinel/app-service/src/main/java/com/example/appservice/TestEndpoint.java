@@ -11,9 +11,9 @@ import reactor.core.publisher.Mono;
 @RequestMapping("api")
 public class TestEndpoint {
     @GetMapping("/user/{id}")
-    public Mono<String> user(@PathVariable String id,ServerWebExchange exchange) throws Exception {
+    public Mono<String> user(@PathVariable String id, ServerWebExchange exchange) throws Exception {
         Thread.sleep(600);
-        return Mono.justOrEmpty("user-" + id + exchange.getRequest().getHeaders());
+        return Mono.justOrEmpty("user-" + id + " " + exchange.getRequest().getHeaders().getFirst("Authorization"));
     }
 
     @GetMapping("/products/{id}")
