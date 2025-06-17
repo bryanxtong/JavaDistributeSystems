@@ -23,3 +23,6 @@ transport:
 	port: 8719
 	clientIp: 192.168.71.3
 ```
+
+If you are using Spring Cloud Alibaba 2023.0.1, there is no problem for the api gateway page on sentinel dashboard. but if you upgrade to 2023.0.3.3, make changes to add SentinelApplicationContextInitializer.java and SentinelAutoConfiguration.java
+as a temp solution.
