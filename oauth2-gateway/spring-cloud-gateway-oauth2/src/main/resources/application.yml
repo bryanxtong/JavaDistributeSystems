@@ -82,6 +82,9 @@ resilience4j:
         permitted-number-of-calls-in-half-open-state: 5
         failure-rate-threshold: 50
         wait-duration-in-open-state: 15000
+        minimum-number-of-calls: 5
+        slow-call-rate-threshold: 50
+        slow-call-duration-threshold: 1000
   timelimiter:
     configs:
       default:
