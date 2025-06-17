@@ -5,47 +5,49 @@ spring:
     name: gateway-oauth2
   cloud:
     gateway:
-      default-filters:
-        - TokenRelay
-        - name: RequestRateLimiter
-          args:
-            redis-rate-limiter.replenishRate: 10
-            redis-rate-limiter.burstCapacity: 20
-            redis-rate-limiter.requestTokens: 1
-            key-resolver: "#{@userKeyResolver}"
-        - name: Retry
-          args:
-            retries: 3
-            methods: GET
-            series: SERVER_ERROR
-            exceptions: java.io.IOException,java.util.concurrent.TimeoutException
-            backoff:
-              firstBackOff: 50ms
-              maxBackOff: 500ms
-              factor: 2
-              basedOnPreviousValue: false
-      routes:
-        - id: user-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/user/**
-          filters:
-            - name: CircuitBreaker
+      server:
+        webflux:
+          default-filters:
+            - TokenRelay
+            - name: RequestRateLimiter
               args:
-                name: userCircuitBreaker
-                fallbackUri: forward:/user-fallback
-        - id: product-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/products/**
-        - id: admin-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/admin/**
-        - id: manager-service
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/manager/**
+                redis-rate-limiter.replenishRate: 10
+                redis-rate-limiter.burstCapacity: 20
+                redis-rate-limiter.requestTokens: 1
+                key-resolver: "#{@userKeyResolver}"
+            - name: Retry
+              args:
+                retries: 3
+                methods: GET
+                series: SERVER_ERROR
+                exceptions: java.io.IOException,java.util.concurrent.TimeoutException
+                backoff:
+                  firstBackOff: 50ms
+                  maxBackOff: 500ms
+                  factor: 2
+                  basedOnPreviousValue: false
+          routes:
+            - id: user-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/user/**
+              filters:
+                - name: CircuitBreaker
+                  args:
+                    name: userCircuitBreaker
+                    fallbackUri: forward:/user-fallback
+            - id: product-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/products/**
+            - id: admin-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/admin/**
+            - id: manager-service
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/manager/**
   security:
     oauth2:
       client:
