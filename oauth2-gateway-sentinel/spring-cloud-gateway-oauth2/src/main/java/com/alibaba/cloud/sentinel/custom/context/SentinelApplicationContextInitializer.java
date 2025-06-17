@@ -47,7 +47,6 @@ public class SentinelApplicationContextInitializer implements ApplicationContext
                 .bindOrCreate(SentinelConstants.PROPERTY_PREFIX, SentinelProperties.class);
 
         initSentinelConfig(sentinelProperties, applicationName);
-        System.out.println("SentinelApplicationContextInitializer====>"+ System.getProperties());
     }
 
     private void initSentinelConfig(SentinelProperties properties, String applicationName) {
